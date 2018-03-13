@@ -76,3 +76,25 @@ add_shortcode('has_club', 'if_has_club_shortcode' );
 function if_has_club_shortcode ($atts, $content = null){
     return user_has_club()?'':$content;
 }
+
+/*
+ * Request google geocoding service
+ */
+function geocoding_sync($address, $API_KEY){
+    $address = urlencode($address);
+    $url = "https://maps.googleapis.com/maps/api/geocode/json?address={$address}&key={$API_KEY}";
+    $resp_json = file_get_contents($url);
+    $resp = json_decode($resp_json, true);
+    if($resp['status']=='OK'){
+        // get the important data
+        $lati = isset($resp['results'][0]['geometry']['location']['lat']) ? $resp['results'][0]['geometry']['location']['lat'] : "";
+        $longi = isset($resp['results'][0]['geometry']['location']['lng']) ? $resp['results'][0]['geometry']['location']['lng'] : "";
+        $formatted_address = isset($resp['results'][0]['formatted_address']) ? $resp['results'][0]['formatted_address'] : "";
+
+        return array(
+            'lat' => $lati,
+            'lng' => $longi,
+            'formatted_address' => $formatted_address);
+    }
+    return false;
+}
