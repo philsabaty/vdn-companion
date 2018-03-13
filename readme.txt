@@ -21,4 +21,8 @@ https://www.itthinx.com/plugins/groups/
 * Fixed possible division by zero in clubs map
 * Added events map shortcode
 * Added custom field "type" for CPT tribe_events
+* Added custom field "GPS" for CPT tribe_venues
+* Added event types support ad selector in event map
+* Added html list of clubs in club map
+
 
