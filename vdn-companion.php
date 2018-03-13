@@ -2,7 +2,7 @@
 /**
  * Plugin Name: VDN Companion
  * Description: VDN Companion contient des éléments indispensables au site Voyageurs du Numérique. A utiliser avec le theme VDN-theme
- * Version: 1.0.0
+ * Version: 1.1
  * Text Domain: vdn-companion
  * Author: Philippe Sabaty for BSF
  * Author URI: https://www.malt.fr/profile/philippesabaty
@@ -28,6 +28,7 @@ define( 'ACF_LITE', true );
  */
 require dirname(__FILE__) . '/inc/CPT-club.php';
 require dirname(__FILE__) . '/inc/CPT-fiche.php';
+require dirname(__FILE__) . '/inc/CPT-tribe_events.php';
 
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
@@ -96,6 +97,11 @@ require dirname(__FILE__) . '/inc/club-creation-form.php';
  * Add a vdn_club_map shortcode for /clubs
  */
 require dirname(__FILE__) . '/inc/club-map-shortcode.php';
+
+/*
+ * Add a vdn_event_map shortcode for /events
+ */
+require dirname(__FILE__) . '/inc/events-map-shortcode.php';
 
 /**
  * Add a Club widget for sidebar

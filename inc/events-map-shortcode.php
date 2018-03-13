@@ -1,47 +1,47 @@
 <?php
 /*
- * Add a vdn_club_map shortcode for /category/fiches-thematiques/...
+ * Add a vdn_event_map shortcode for /category/fiches-thematiques/...
  * Add an ajax target for tags autosuggest
  */
 
-add_shortcode( 'vdn_club_map', 'vdn_club_map_shortcode' );
-function vdn_club_map_shortcode() {
+add_shortcode( 'vdn_event_map', 'vdn_event_map_shortcode' );
+function vdn_event_map_shortcode() {
     ob_start();
-    vdn_club_map_html();
+    vdn_event_map_html();
     return ob_get_clean();
 }
-function vdn_club_map_html() {
+function vdn_event_map_html() {
     ?>
 
     <div id="map" style="width:100%; height:480px;"></div>
     <script>
-        var Markers = {};
+        var markers = [];
         var infowindow;
-        var geocoder;
+        var map ;
         var locations = [
         <?php
-        $clubs = get_posts(array('post_type' => 'club'));
+        $events = get_posts(array('post_type' => 'tribe_events'));
         $coord_avg = [0,0];
-        foreach($clubs as $club){
-        //die(print_r(get_post_custom($club->ID)));
-        $coords = explode(',', get_post_meta($club->ID, 'coordonnees_gps', true));
-        $address =  get_post_meta($club->ID, 'code_postal', true).'  '. get_post_meta($club->ID, 'ville', true);
-        //$thumbnail = wp_get_attachment_url( get_post_thumbnail_id($club->ID), '50x50' );
+        foreach($events as $event){
+        //die(print_r(get_post_custom($event->ID)));
+        $coords = explode(',', get_post_meta($event->ID, 'coordonnees_gps', true));
+        $address =  get_post_meta($event->ID, 'code_postal', true).'  '. get_post_meta($event->ID, 'ville', true);
+        //$thumbnail = wp_get_attachment_url( get_post_thumbnail_id($event->ID), '50x50' );
         $coord_avg[0] += $coords[0];
         $coord_avg[1] += $coords[1];
         echo "
             [
-                '{$club->post_title}',
-                '<strong>{$club->post_title}</strong><br><p>$address<br><strong><a href=\'".get_site_url(null, "/club/{$club->post_name}")."\'>Voir ce club.</a></strong></p>',
+                '{$event->post_title}',
+                '<strong>{$event->post_title}</strong><br><strong><a href=\'".get_site_url(null, "/event/{$event->post_name}")."\'>Voir cet événement.</a></strong></p>',
                 {$coords[0]},
                 {$coords[1]},
-                0
+                {$event->ID}
             ],
             ";
         }
-        if(count($clubs)>0){
-            $coord_avg[0]  = $coord_avg[0] / count($clubs);
-            $coord_avg[1] += $coords[1] / count($clubs);
+        if(count($events)>0){
+            $coord_avg[0]  = $coord_avg[0] / count($events);
+            $coord_avg[1] += $coords[1] / count($events);
         }
         ?>
         ];
@@ -49,7 +49,7 @@ function vdn_club_map_html() {
         function initMap() {
             geocoder = new google.maps.Geocoder();
 
-            var map = new google.maps.Map(document.getElementById('map'), {
+            map = new google.maps.Map(document.getElementById('map'), {
                 zoom: 5,
                 center: new google.maps.LatLng(<?php echo $coord_avg[0]; ?>, <?php echo $coord_avg[1]; ?>)
             });
@@ -75,7 +75,7 @@ function vdn_club_map_html() {
                         infowindow.open(map, marker);
                     }
                 }) (marker, i));
-                Markers[locations[i][4]] = marker;
+                markers[locations[i][4]] = marker;
             }
 
         }

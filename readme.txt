@@ -1,7 +1,6 @@
 VDN-Companion
 
 This wordpress plugin mainly deals with custom post types (CPT) used in VDN website. 
-This is a proprietary plugin, aimed to the specific use of VDN website.
 
 This plugin is meant to be used in association with VDN-theme :
 https://github.com/philsabaty/vdn-theme
@@ -17,4 +16,9 @@ https://ultimatemember.com/
 
 Finally, it uses Groups plugin. No prior settings required
 https://www.itthinx.com/plugins/groups/
+
+-- V1.1 Changelog --
+* Fixed possible division by zero in clubs map
+* Added events map shortcode
+* Added custom field "type" for CPT tribe_events
 
