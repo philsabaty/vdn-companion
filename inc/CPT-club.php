@@ -283,9 +283,8 @@ add_action( 'save_post', 'add_club_category_for_posts' );
 function add_club_category_for_posts($post_id){
     $post_type = get_post_type($post_id);
     if ( in_array($post_type, array('post', 'fiche', 'tribe_events' ))  ) {
-        //$current_user = wp_get_current_user();
-        $club_slug = um_profile('club');
-        if($club_slug!=null){
+        if(user_has_club()){
+            $club_slug = um_profile('club');
             $category_slug = "club_$club_slug";
             $category_id = wp_create_category($category_slug);
             wp_set_post_categories($post_id, array($category_id), true);
@@ -309,9 +308,8 @@ function vdn_send_club_validation_email($club_id){
         $author->user_email,
         "Voyageurs Du Numérique : Votre club est validé !",
         $email_content,
-        array(
-            'Content-Type: text/html; charset=UTF-8;',
-            "From: Voyageurs Du Numérique <".get_bloginfo('admin_email').">;",
-        )
+        'Content-Type: text/html; charset=UTF-8;'. "\r\n"
+        ."From: Voyageurs Du Numerique <".get_bloginfo('admin_email').">". "\r\n"
+        
     );
 }

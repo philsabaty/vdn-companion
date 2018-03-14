@@ -24,5 +24,8 @@ https://www.itthinx.com/plugins/groups/
 * Added custom field "GPS" for CPT tribe_venues
 * Added event types support ad selector in event map
 * Added html list of clubs in club map
+* Fixed error preventing sending club validation email
+* Made regular posts visible to everyone
+* Fixed potential creation of empty club category
 
 

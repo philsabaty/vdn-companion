@@ -64,7 +64,7 @@ function if_logged_in_shortcode ($atts, $content = null){
  * @return bool
  */
 function user_has_club(){
-    return ( um_profile('club')!=null && um_profile('club')!='-1') ;
+    return ( um_profile('club')!=null && um_profile('club')!='-1' && um_profile('club')!='') ;
 }
 
 add_shortcode('not_loggedin', 'if_not_logged_in_shortcode' );

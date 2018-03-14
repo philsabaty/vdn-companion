@@ -308,8 +308,8 @@ function vdn_get_fiche_fields_group(){
 /*
  * Allow CPT "Fiche" in category pages
  */
-add_filter( 'pre_get_posts', 'namespace_add_custom_types' );
-function namespace_add_custom_types( $query ) {
+add_filter( 'pre_get_posts', 'vdn_add_custom_types' );
+function vdn_add_custom_types( $query ) {
     if( is_category() || is_tag() && empty( $query->query_vars['suppress_filters'] ) ) {
         $query->set( 'post_type', array(
             'post', 'nav_menu_item', 'fiche'
@@ -415,7 +415,7 @@ function vdn_metabox_thematiques_content($post) {
  */
 add_action( 'save_post', function ($post_id) {
     $post_type = get_post_type($post_id);
-    if( in_array($post_type, array('fiche', 'post')) ){
+    if( in_array($post_type, array('fiche')) ){
         if ( ! vdn_is_admin() ){
             $registered_group = Groups_Group::read_by_name( 'Registered' );
             //die('$registered_group='.print_r($registered_group, true));
