@@ -240,7 +240,9 @@ function add_category_for_club($post_id){
         $club_slug = $post->post_name;
         $category_slug = "club_$club_slug";
         if(get_category_by_slug( $category_slug )===false){
-            wp_create_category($category_slug);
+            //wp_create_category($category_slug);
+            $category_name = "Club \"{$post->post_title}\""; 
+            wp_insert_category( array('cat_name' => $category_name, 'category_nicename' => $category_slug) );
         }
         // Attach club to club author (TODO : not working : um_profile() doesn't use user_meta)
         $author_id = get_post_field('post_author', $post_id);

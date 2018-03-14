@@ -318,27 +318,6 @@ function vdn_add_custom_types( $query ) {
     }
 }
 
-/*
- * Filter categories _display_ for CPT Fiche (remove unclassified and club_xxx)
- */
-add_filter('the_category_list', function ($categories, $post_id){
-    //die('the_category_list : $categories='.print_r($categories, true));
-    $post = get_post($post_id);
-    if ( 'fiche' === $post->post_type ){
-        foreach ($categories as $k => $cat) {
-            if( in_array($cat->name, array('.', 'Club ""')) && (count($categories)>1)) {
-                unset($categories[$k]); // causes 404 if no more category attached to post
-            }else if( strpos($cat->name, 'club_')===0){
-                // TODO : instead of unsetting, replace by club link ?
-                //unset($categories[$k]);
-            }
-        }
-    }
-    return $categories;
-}, 10, 2);
-
-
-
 /**
  * Add custom fields for Fiche PDF export
  */
@@ -384,7 +363,7 @@ function export_full_fiche_pdf( $content ){
  */
 add_action( 'add_meta_boxes', 'vdn_metabox_thematiques_fiche' );
 function vdn_metabox_thematiques_fiche() {
-    add_meta_box( 'after-title-help', 'Catégories thématiques', 'vdn_metabox_thematiques_content', 'fiche', 'acf_after_title', 'high' );
+    add_meta_box( 'after-title-help', 'Catégories thématiques', 'vdn_metabox_thematiques_content', array('fiche', 'post'), 'acf_after_title', 'high' );
 }
 function vdn_metabox_thematiques_content($post) {
     ?>

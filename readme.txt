@@ -26,6 +26,6 @@ https://www.itthinx.com/plugins/groups/
 * Added html list of clubs in club map
 * Fixed error preventing sending club validation email
 * Made regular posts visible to everyone
-* Fixed potential creation of empty club category
+* Improved club category management
 
 
