@@ -63,8 +63,30 @@ function if_logged_in_shortcode ($atts, $content = null){
 /**
  * @return bool
  */
-function user_has_club(){
-    return ( um_profile('club')!=null && um_profile('club')!='-1' && um_profile('club')!='') ;
+function user_has_club($user_id=0){
+    return ( get_user_club($user_id)!=null ) ;
+}
+
+/**
+ * @param int $user_id
+ * @return string|null Club slug
+ */
+function get_user_club($user_id=0){
+    $user_id = ($user_id!=0)?$user_id:get_current_user_id();
+    if($user_id==0){return null;}
+    $club_slug = get_user_meta($user_id, 'club', true);
+    $club_slug = (in_array($club_slug, array('', '-1')))?null:$club_slug;
+    return $club_slug;
+}
+
+function set_user_club($club_slug, $user_id=0){
+    $user_id = ($user_id!=0)?$user_id:get_current_user_id();
+    update_user_meta($user_id, 'club', $club_slug);
+}
+
+function unset_user_club($user_id=0){
+    $user_id = ($user_id!=0)?$user_id:get_current_user_id();
+    delete_user_meta($user_id, 'club');
 }
 
 add_shortcode('not_loggedin', 'if_not_logged_in_shortcode' );

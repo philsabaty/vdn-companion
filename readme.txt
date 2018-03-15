@@ -27,5 +27,5 @@ https://www.itthinx.com/plugins/groups/
 * Fixed error preventing sending club validation email
 * Made regular posts visible to everyone
 * Improved club category management
-
+* Club membership managed by user_meta (no more UM)
 

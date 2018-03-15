@@ -39,8 +39,8 @@ class monclub_widget extends WP_Widget {
             $output .= '<li><a href="'.get_site_url(null, '/login/').'">Connexion</a></li>';
         }
         if( is_user_logged_in() ){
-            $club_slug = um_profile('club');
-            if(user_has_club()){
+            $club_slug = get_user_club();
+            if($club_slug != null){
                 $club = vdn_get_club_by_slug($club_slug);
                 $output .= '<li><a href="'.get_site_url(null, '/club/'.$club_slug).'">Mon club ('.$club->post_title.')</a></li>';
             }else{

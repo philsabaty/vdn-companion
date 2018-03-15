@@ -285,8 +285,8 @@ add_action( 'save_post', 'add_club_category_for_posts' );
 function add_club_category_for_posts($post_id){
     $post_type = get_post_type($post_id);
     if ( in_array($post_type, array('post', 'fiche', 'tribe_events' ))  ) {
-        if(user_has_club()){
-            $club_slug = um_profile('club');
+        $club_slug = get_user_club();
+        if($club_slug!=null){
             $category_slug = "club_$club_slug";
             $category_id = wp_create_category($category_slug);
             wp_set_post_categories($post_id, array($category_id), true);
