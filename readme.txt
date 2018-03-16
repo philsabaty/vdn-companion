@@ -33,3 +33,4 @@ https://www.itthinx.com/plugins/groups/
 -- V1.2 Changelog --
 * Added autocenter and multiple markers support on maps
 * Added a config.php for misc settings
+* New feature : Send notification email when a post is published by a non-admin

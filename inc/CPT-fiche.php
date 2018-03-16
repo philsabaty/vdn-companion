@@ -458,3 +458,34 @@ function set_fiche_default_read_group() {
         <?php
     }
 }
+
+
+/*
+ * Send notification email when a fiche (and more) is published by a non-admin
+ */
+add_action( 'save_post', function ($post_id) {
+    global $VDN_CONFIG;
+    $post_type = get_post_type($post_id);
+    if( in_array($post_type, array('fiche', 'post', 'tribe_events')) ){
+        if( !vdn_is_admin() && !wp_is_post_revision($post_id) && !wp_is_post_autosave($post_id)  ) {
+            if ( isset($VDN_CONFIG['user_action_notification_email']) && $VDN_CONFIG['user_action_notification_email']!='' ){
+                $author_id = get_post_field ('post_author', $post_id);
+                $author = get_userdata($author_id);
+                $post = get_post($post_id);
+                $mail_content = "Bonjour,<br>
+                l' utlisateur \"<a href='".get_site_url(null, '/user/'.$author->user_nicename)."'>".$author->display_name."</a>\" 
+                vient de créer ou de modifier un élément sur Voyageurs du Numérique :<br>
+                <a href='".get_post_permalink($post_id)."'>{$post->post_title}</a>
+                <br><br>
+                Ceci est un mail automatique, aucune action n'est requise de votre part.";
+
+                wp_mail( //$to, $subject, $message
+                    $VDN_CONFIG['user_action_notification_email'],
+                    "[VDN] Notification de nouveau contenu utilisateur",
+                    $mail_content,
+                    array('Content-Type: text/html; charset=UTF-8')
+                );
+            }
+        }
+    }
+});

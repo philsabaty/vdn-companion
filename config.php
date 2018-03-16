@@ -3,6 +3,7 @@
  * Global config for VDN features
  */
 $VDN_CONFIG = array(
+    'user_action_notification_email' => 'mahaut.demoulins@bibliosansfrontieres.org', // leave blank to disable notification
     'vdn_event_types' => array(
         'atelier'=>array(
             'label'=>'Atelier',
