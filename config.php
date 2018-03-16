@@ -4,6 +4,7 @@
  */
 $VDN_CONFIG = array(
     'user_action_notification_email' => 'mahaut.demoulins@bibliosansfrontieres.org', // leave blank to disable notification
+    'open_fiches_in_new_tab' => true,
     'vdn_event_types' => array(
         'atelier'=>array(
             'label'=>'Atelier',
@@ -55,5 +56,14 @@ $VDN_CONFIG = array(
             'label'=>'Belgique', 
             'email'=>'dimitri.verboomen@bibliosansfrontieres.org'
         ),
-    )
+    ),
+    'disclaimer_html_content' => "
+            <div class='vdn_nonbsf_disclaimer'>
+                Cette contribution a été rédigée par un membre de la communauté des Voyageurs du Numérique. <br>
+                Afin d'inciter la créativité des participants, l'équipe de Voyageurs du Numérique publie ce contenu sans validation préalable.
+                <br><u>Bibliothèques sans Frontières n'engage pas sa responsabilité sur le contenu de ces fiches.</u> <br>
+                Si un contenu vous semble inapprorié, merci de nous le signaler depuis la page Ecrivez-nous. <br>
+                L'équipe des Voyageurs du Numérique.
+            </div>
+            "
 );

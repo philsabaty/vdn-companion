@@ -14,7 +14,7 @@ function vdn_get_user_role($id=0){
 
 function vdn_is_admin($id=0){
     $id = ($id==0)?get_current_user_id():$id;
-    $user_role = vdn_get_user_role(get_current_user_id());
+    $user_role = vdn_get_user_role($id);
     return (strpos($user_role, 'admin')!==false ) ;
 }
 
@@ -119,4 +119,15 @@ function geocoding_sync($address, $API_KEY){
             'formatted_address' => $formatted_address);
     }
     return false;
+}
+
+function display_bsf_content_disclaimer($post_id){
+    global $VDN_CONFIG;
+    // add a disclaimer message for non-BSF fiches
+    $author_id = get_post_field('post_author', $post_id);
+    if(get_the_author()!='BSF' && (!vdn_is_admin($author_id)) && isset($VDN_CONFIG['disclaimer_html_content'])){
+        echo '<hr>';
+        echo $VDN_CONFIG['disclaimer_html_content'];
+    }
+
 }
