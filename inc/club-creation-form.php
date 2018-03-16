@@ -5,15 +5,9 @@
 
 add_shortcode( 'vdn_club_creation_form', 'vdn_club_creation_form_shortcode' );
 function vdn_club_creation_form_shortcode() {
+    global $VDN_CONFIG;
+    $coordinateurs_bsf = $VDN_CONFIG['coordinateurs_bsf'];
     ob_start();
-    $coordinateurs_bsf = array(
-        'autre'=>array('label'=>'Autre', 'email'=>'mahaut.demoulins@bibliosansfrontieres.org'),
-        'PACA'=>array('label'=>'Région PACA', 'email'=>'roseline.faliph@bibliosansfrontieres.org'),
-        'hauts_de_france'=>array('label'=>'Région Hauts-de-France', 'email'=>'adrien.bertrand@bibliosansfrontieres.org'),
-        'grand_est'=>array('label'=>'Région Grand-Est', 'email'=>'charles.thomassin@bibliosansfrontieres.org'),
-        'nouvelle-aquitaine'=>array('label'=>'Région Nouvelle-Aquitaine', 'email'=>'charlene.palard@bibliosansfrontieres.org'),
-        'belgique'=>array('label'=>'Belgique', 'email'=>'dimitri.verboomen@bibliosansfrontieres.org'),
-    );
     $mail_sent = vdn_club_creation_form_process($coordinateurs_bsf);
     if($mail_sent) {
         vdn_club_creation_confirmed_html();

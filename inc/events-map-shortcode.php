@@ -11,44 +11,8 @@ function vdn_event_map_shortcode() {
     return ob_get_clean();
 }
 function vdn_event_map_html() {
-    $event_types = array(
-        'evenement'=>array(
-            'label'=>'événement',
-            'slug'=>'evenement',
-            'color'=>'e95a51',
-            'letter'=>'E',
-        ),
-        'formation_animateurs'=>array(
-            'label'=>'formation d animateurs VDN',
-            'slug'=>'formation_animateurs',
-            'color'=>'5171b6',
-            'letter'=>'F',
-        ),
-        'atelier_ponctuel'=>array(
-            'label'=>'atelier ponctuel',
-            'slug'=>'atelier_ponctuel',
-            'color'=>'00ff00',
-            'letter'=>'P',
-        ),
-        'atelier_recurrent'=>array(
-            'label'=>'atelier récurrent',
-            'slug'=>'atelier_recurrent',
-            'color'=>'708090',
-            'letter'=>'R',
-        ),
-        'apero_VDN'=>array(
-            'label'=>'apéro VDN',
-            'slug'=>'apero_VDN',
-            'color'=>'ff0000',
-            'letter'=>'A',
-        ),
-        'tour_de_france'=>array(
-            'label'=>'Tour de France',
-            'slug'=>'tour_de_france',
-            'color'=>'0000ff',
-            'letter'=>'T',
-        ),
-    );
+    global $VDN_CONFIG;
+    $event_types = $VDN_CONFIG['vdn_event_types'];
     ?>
 
     <div class="row" style="background-color:#ddd;padding:4px;">
@@ -57,8 +21,8 @@ function vdn_event_map_html() {
             <select style="width:100%" onchange="return update_vdn_events(this)">
                 <option value='all' selected="selected">Tous</option>
             <?php
-            foreach($event_types as $et){
-                echo "<option style='background-color:#{$et['color']}' value='{$et['slug']}'>{$et['label']}</option>";
+            foreach($event_types as $k=>$v){
+                echo "<option style='background-color:#{$v['color']}' value='{$k}'>{$v['label']}</option>";
             }
             ?>
             </select>

@@ -19,6 +19,10 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
+/*
+ * Global config for VDN features
+ */
+require dirname(__FILE__) . '/config.php';
 
 require dirname(__FILE__) . '/inc/libs/advanced-custom-fields/acf.php';
 define( 'ACF_LITE', true );

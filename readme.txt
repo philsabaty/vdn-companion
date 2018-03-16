@@ -32,3 +32,4 @@ https://www.itthinx.com/plugins/groups/
 
 -- V1.2 Changelog --
 * Added autocenter and multiple markers support on maps
+* Added a config.php for misc settings

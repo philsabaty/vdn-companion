@@ -5,25 +5,19 @@
  * Date: 12/03/2018
  * Time: 16:54
  */
+$tribe_event_choices = array_map(function($v){return $v['label'];}, $VDN_CONFIG['vdn_event_types']);
 
 register_field_group(array (
     'id' => 'acf_options-tribe_events',
-    'title' => 'Options Events',
+    'title' => 'Options événements',
     'fields' => array (
         array (
             'key' => 'field_1a8d6ba117075',
             'label' => 'Type',
             'name' => 'type',
             'type' => 'select',
-            'choices' => array (
-                'formation_animateurs' => 'formation d animateurs VDN',
-                'atelier_recurrent' => 'atelier récurrent',
-                'atelier_ponctuel' => 'atelier ponctuel',
-                'apero_VDN' => 'apéro VDN',
-                'evenement' => 'événement',
-                'tour_de_france' => 'Tour de France',
-            ),
-            'default_value' => '',
+            'choices' => $tribe_event_choices,
+            'default_value' => 'atelier',
             'allow_null' => 0,
             'multiple' => 0,
         ),
