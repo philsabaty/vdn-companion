@@ -29,3 +29,6 @@ https://www.itthinx.com/plugins/groups/
 * Improved club category management
 * Club membership managed by user_meta (no more UM)
 
+
+-- V1.2 Changelog --
+* Added autocenter and multiple markers support on maps

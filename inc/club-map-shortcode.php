@@ -38,45 +38,37 @@ function vdn_club_map_html() {
             window.location = '/club/'+selectedClubSlug;
             return false;
         }
-        var Markers = {};
+        var map;
+        var markers = [];
         var infowindow;
-        var geocoder;
         var locations = [
         <?php
-        $coord_avg = [0,0];
-        $coord_count = 0;
         foreach($clubs as $club){
             $coords = explode(',', get_post_meta($club->ID, 'coordonnees_gps', true));
             if(count($coords)==2){
                 $address =  get_post_meta($club->ID, 'code_postal', true).'  '. get_post_meta($club->ID, 'ville', true);
-                //$thumbnail = wp_get_attachment_url( get_post_thumbnail_id($club->ID), '50x50' );
-                $coord_avg[0] += $coords[0];
-                $coord_avg[1] += $coords[1];
-                $coord_count++;
                 echo "
-                    [
-                        '{$club->post_title}',
-                        '<strong>{$club->post_title}</strong><br><p>$address<br><strong><a href=\'".get_site_url(null, "/club/{$club->post_name}")."\'>Voir ce club.</a></strong></p>',
-                        {$coords[0]},
-                        {$coords[1]},
-                        0
-                    ],
+                    {
+                        wpid: '{$club->ID}',
+                        html: '<strong>{$club->post_title}</strong><br><p>$address<br><strong><a href=\'".get_site_url(null, "/club/{$club->post_name}")."\'>Voir ce club.</a></strong></p>',
+                        lat: {$coords[0]},
+                        lng: {$coords[1]},
+                        marker: null,
+                },
                 ";
             }
-        }
-        if($coord_count>1){
-            $coord_avg[0] = $coord_avg[0] / $coord_count;
-            $coord_avg[1] = $coord_avg[1] / $coord_count;
         }
         ?>
         ];
 
         function initMap() {
-            geocoder = new google.maps.Geocoder();
+            var bounds = new google.maps.LatLngBounds();
+            map = new google.maps.Map(document.getElementById('map'));
 
-            var map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 5,
-                center: new google.maps.LatLng(<?php echo $coord_avg[0]; ?>, <?php echo $coord_avg[1]; ?>)
+            var oms = new OverlappingMarkerSpiderfier(map, {
+                markersWontMove: true,
+                markersWontHide: true,
+                basicFormatEvents: true
             });
 
             var image = {
@@ -88,23 +80,43 @@ function vdn_club_map_html() {
             infowindow = new google.maps.InfoWindow();
 
             for(i=0; i<locations.length; i++) {
-                var position = new google.maps.LatLng(locations[i][2], locations[i][3]);
+                var position = new google.maps.LatLng(locations[i].lat, locations[i].lng);
                 var marker = new google.maps.Marker({
                     position: position,
-                    map: map,
+                    //map: map,
                 });
-                google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                oms.addMarker(marker);
+
+                // use spider_click instead of click to use with OverlappingMarkerSpiderfier
+                google.maps.event.addListener(marker, 'spider_click', (function(marker, i) {
                     return function() {
-                        infowindow.setContent(locations[i][1]);
+                        infowindow.setContent(locations[i].html);
                         infowindow.setOptions({maxWidth: 200});
                         infowindow.open(map, marker);
                     }
                 }) (marker, i));
-                Markers[locations[i][4]] = marker;
+                locations[i].marker = marker;
+                markers.push(marker);
+                bounds.extend(marker.getPosition());
+            }
+            
+            if(locations.length>1) {
+                google.maps.event.addListenerOnce(map, 'bounds_changed', function (event) {
+                    console.log('bounds_changed : zoom was '+map.getZoom());
+                    map.setZoom(map.getZoom() - 2);
+                    console.log('bounds_changed : zoom now is '+map.getZoom());
+                });
+                map.fitBounds(bounds);
             }
 
+            var markerCluster = new MarkerClusterer(map, markers,
+                {imagePath: '<?php echo plugins_url('/vdn-companion/inc/googlemaps/m'); ?>'}
+            );
+            markerCluster.setMaxZoom(14);
         }
     </script>
+    <script src="<?php echo plugins_url('/vdn-companion/inc/googlemaps/markerclusterer.js'); ?>"></script>
+    <script src="<?php echo plugins_url('/vdn-companion/inc/googlemaps/oms.min.js'); ?>"></script>
     <script async defer
             src="https://maps.googleapis.com/maps/api/js?key=<?php echo get_option('vdn_companion_google_api_key'); ?>&callback=initMap">
     </script>

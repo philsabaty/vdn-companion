@@ -75,21 +75,17 @@ function vdn_event_map_html() {
             }
             return false;
         }
+        var map;
+        var markers = [];
         var infowindow;
-        var map ;
         var locations = [
         <?php
         $events = get_posts(array('post_type' => 'tribe_events'));
-        $coord_avg = [0,0];
-        $coord_count = 0;
         foreach($events as $event){
             $evt_type = get_post_meta($event->ID, 'type', true);
             $location_id = vdn_get_event_location_id($event->ID);
             $coords = explode(',', get_post_meta($location_id, 'coordonnees_gps', true));
             if(count($coords)==2){
-                $coord_avg[0] += $coords[0];
-                $coord_avg[1] += $coords[1];
-                $coord_count++;
                 echo "
                     {
                         wpid: '{$event->ID}',
@@ -102,21 +98,18 @@ function vdn_event_map_html() {
                 ";
             }
         }
-        if($coord_count>1){
-            $coord_avg[0] = $coord_avg[0] / $coord_count;
-            $coord_avg[1] = $coord_avg[1] / $coord_count;
-        }
         ?>
         ];
 
         function initMap() {
-            geocoder = new google.maps.Geocoder();
-
-            map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 5,
-                center: new google.maps.LatLng(<?php echo $coord_avg[0]; ?>, <?php echo $coord_avg[1]; ?>)
+            var bounds = new google.maps.LatLngBounds();
+            map = new google.maps.Map(document.getElementById('map'));
+            
+            var oms = new OverlappingMarkerSpiderfier(map, {
+                markersWontMove: true,
+                markersWontHide: true,
+                basicFormatEvents: true
             });
-
             var marker_icons = {
                 <?php
                 foreach($event_types as $et){
@@ -141,9 +134,11 @@ function vdn_event_map_html() {
                 var marker = new google.maps.Marker({
                     icon: marker_icon,
                     position: position,
-                    map: map,
+                    //map: map,
                 });
-                google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                oms.addMarker(marker);
+                // use spider_click instead of click to use with OverlappingMarkerSpiderfier
+                google.maps.event.addListener(marker, 'spider_click', (function(marker, i) {
                     return function() {
                         infowindow.setContent(locations[i].html);
                         infowindow.setOptions({maxWidth: 200});
@@ -151,10 +146,25 @@ function vdn_event_map_html() {
                     }
                 }) (marker, i));
                 locations[i].marker = marker;
+                markers.push(marker);
+                bounds.extend(marker.getPosition());
             }
 
+            if(locations.length>1) {
+                google.maps.event.addListenerOnce(map, 'bounds_changed', function (event) {
+                    map.setZoom(map.getZoom() - 2);
+                });
+                map.fitBounds(bounds);
+            }
+            
+            var markerCluster = new MarkerClusterer(map, markers,
+                {imagePath: '<?php echo plugins_url('/vdn-companion/inc/googlemaps/m'); ?>'}
+            );
+            markerCluster.setMaxZoom(14);
         }
     </script>
+    <script src="<?php echo plugins_url('/vdn-companion/inc/googlemaps/markerclusterer.js'); ?>"></script>
+    <script src="<?php echo plugins_url('/vdn-companion/inc/googlemaps/oms.min.js'); ?>"></script>
     <script async defer
             src="https://maps.googleapis.com/maps/api/js?key=<?php echo get_option('vdn_companion_google_api_key'); ?>&callback=initMap">
     </script>
