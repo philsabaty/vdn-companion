@@ -1,10 +1,8 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: phil
- * Date: 12/03/2018
- * Time: 16:54
+ * Define extra fields (based on ACF) for tribe events
  */
+global $VDN_CONFIG;
 $tribe_event_choices = array_map(function($v){return $v['label'];}, $VDN_CONFIG['vdn_event_types']);
 
 register_field_group(array (

@@ -1,10 +1,11 @@
 <?php
 /*
- * Global config for VDN features
+ * Global config for VDN features // $VDN_CONFIG['']
  */
 $VDN_CONFIG = array(
     'user_action_notification_email' => 'mahaut.demoulins@bibliosansfrontieres.org', // leave blank to disable notification
     'open_fiches_in_new_tab' => true,
+    'display_referent_email' => true,
     'vdn_event_types' => array(
         'atelier'=>array(
             'label'=>'Atelier',
@@ -29,6 +30,20 @@ $VDN_CONFIG = array(
             'slug'=>'tour_de_france',
             'color'=>'fc6d6d',
             'letter'=>'T',
+        ),
+    ),
+    'vdn_fiche_types' => array(
+        'activite'=>array(
+            'label'=>'Fiche activité',
+            'color'=>'e95a51',
+        ),
+        'parcours'=>array(
+            'label'=>'Parcours pédagogique',
+            'color'=>'5171b6',
+        ),
+        'outil'=>array(
+            'label'=>'Conseils et médiation',
+            'color'=>'888888',
         ),
     ),
     'coordinateurs_bsf' => array(

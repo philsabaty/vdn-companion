@@ -34,3 +34,7 @@ https://www.itthinx.com/plugins/groups/
 * Added autocenter and multiple markers support on maps
 * Added a config.php for misc settings
 * New feature : Send notification email when a post is published by a non-admin
+* Many settings moved to vdn-companion/config.php
+* Improved PDF rendering
+* Added coordinateurs BSF dispatch in contact form
+

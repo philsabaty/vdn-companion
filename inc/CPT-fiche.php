@@ -1,8 +1,9 @@
 <?php
-
 /*
  * Define Fiche CPT
  */
+global $VDN_CONFIG;
+
 add_action('init', 'register_fiche_cpt');
 function register_fiche_cpt() {
     register_post_type(
@@ -46,6 +47,8 @@ function register_fiche_cpt() {
  */
 if(function_exists("register_field_group"))
 {
+    $fiche_type_choices = array_map(function($v){return $v['label'];}, $VDN_CONFIG['vdn_fiche_types']);
+
     register_field_group(array (
         'id' => 'acf_options-fiches',
         'title' => 'Options fiches',
@@ -66,11 +69,7 @@ if(function_exists("register_field_group"))
                 'label' => 'Type',
                 'name' => 'type',
                 'type' => 'select',
-                'choices' => array (
-                    'activite' => 'Fiche activité',
-                    'parcours' => 'Parcours pédagogique',
-                    'outil' => 'Conseils et médiation',
-                ),
+                'choices' => $fiche_type_choices,
                 'default_value' => '',
                 'allow_null' => 0,
                 'multiple' => 0,
@@ -131,7 +130,7 @@ if(function_exists("register_field_group"))
                 'key' => 'field_5a8c5b932ed8a',
                 'label' => 'durée de préparation',
                 'name' => 'duree_preparation',
-                'type' => 'textarea',
+                'type' => 'text',
                 'instructions' => 'indiquer approximativement le temps de préparation de l’activité : l’activité nécessite peut être seulement
 	                une bonne prise en main des contenus, mais peut également impliquer une préparation de
                     matériel, l’installation d’un espace, ou même la création de supports.',
@@ -145,7 +144,7 @@ if(function_exists("register_field_group"))
                 'key' => 'field_5a8c5c0e2ed8b',
                 'label' => 'Durée de l’animation',
                 'name' => 'duree_animation',
-                'type' => 'textarea',
+                'type' => 'text',
                 'instructions' => 'indiquer une durée assez précise selon le déroulé de l’activité. 
                     Elle permettra une gestion plus fluide et dynamique par la suite.',
                 'default_value' => '',
@@ -323,35 +322,47 @@ function vdn_add_custom_types( $query ) {
  */
 add_filter( 'the_post_export_content', 'export_full_fiche_pdf' );
 function export_full_fiche_pdf( $content ){
+    global $VDN_CONFIG;
     $post = get_post();
+    $main_css_color = '#e95a51';
+    @$main_css_color = '#'.($VDN_CONFIG['vdn_fiche_types'][get_field('type', $post->ID)]['color']);
     if ( 'fiche' === $post->post_type ){
         $fields = get_field_objects($post->ID);
         $new_content = '';
-        //$new_content .= 'Thèmes : '.get_the_category_list(', ').'<br>';
-        //$new_content .= 'Tags : '.get_the_tag_list('', ', ').'<br>';
-        $new_content .= 'Publié le '.get_the_date( 'j F Y' ).'<br>';
-        $post_thumbnail = get_the_post_thumbnail( get_the_ID() , array(400,400));
-        //$extra_content .= ( ! empty( $post_thumbnail ) )?$post_thumbnail:'';
-        $new_content .= '
-        <h2>À propos de cette fiche</h2>
-        <blockquote>
-    Type : '.get_selected_option_label('type').'<br/>
-    Niveau : '.get_selected_option_label('niveau').'<br/>
-    Public : '.implode(', ', get_field('public')).'
-        </blockquote>';
-        $new_content .= $post->post_content.'<hr><br><br>';
+        $new_content .= '<style>
+body{font-family:sans-serif;}
+strong, span{color:'.$main_css_color.';}
+h1, .main_info{color:#fff; background-color: '.$main_css_color.'; display:inline-block;padding:4px; margin:4px; font-weight:bold;float:left;}
+h1{padding-top:16px;}
+</style>';
+        $new_content .= 'Publié le '.get_the_date( 'j F Y' ).' par '.get_the_author_meta('display_name', get_post_field( 'post_author', $post->ID )).'<br>';
+        $new_content .= 'Catégories : <span>'.strip_tags(get_the_category_list(', ')).'</span><br>';
+        $new_content .= 'Mots-clés : <span>'.strip_tags(get_the_tag_list('', ', ')).'</span><br>';
+
+        $new_content .= '<h2>À propos de cette fiche</h2>';
+        $new_content .= '<span class="main_info"> Type : '.get_selected_option_label('type').' </span> &nbsp; ';
+        $new_content .= '<span class="main_info"> Niveau : '.get_selected_option_label('niveau').' </span> &nbsp; ';
+        $new_content .= '<span class="main_info"> Public : '.implode(', ', get_field('public')).' </span> &nbsp; ';
+        $new_content .= '<br><br><hr>';
+        $new_content .= '<table cellpadding="4" cellspacing="0" border="1">';
         foreach( $fields as $field_name => $field ){
             if($field['type']=='text' && $field['value']!='' && !in_array($field['name'], array('type', 'niveau', 'public'))){
-                $new_content .= '<strong>' . $field['label'] . ' </strong> : <span>' . $field['value'] . '</span><br>';
+                $new_content .= '<tr><td>' . $field['label'] . ' </td><td>' . $field['value'] . '</td></tr>';
             }
         }
+        $new_content .= '</table><br>';
         foreach( $fields as $field_name => $field ){
             if($field['type']=='textarea' && $field['value']!=''){
-                $new_content .= '<div><h4>' . $field['label'] . ' :&nbsp;</h4><p>' . $field['value'] . '</p></div>';
+                $new_content .= '<div><strong>' . $field['label'] . ' :&nbsp;</strong><br>' . $field['value'] . '</div>';
             }
         }
+        $new_content .= '<hr><br><br>';
+        $new_content .= '<h2>Contenu</h2><br><br>';
+        $new_content .= $post->post_content.'';
+        $post_thumbnail = get_the_post_thumbnail( get_the_ID() , array(400,400));
+        //$extra_content .= ( ! empty( $post_thumbnail ) )?$post_thumbnail:'';
+        
         $content = $new_content;
-        //die('<pre>'.print_r($fields, true));
         //die($content);
     }
     return $content;

@@ -98,6 +98,11 @@ require dirname(__FILE__) . '/inc/fiche-search-form.php';
 require dirname(__FILE__) . '/inc/club-creation-form.php';
 
 /*
+ * Add a zone_geo_selector shortcode for /ecrivez-nous/
+ */
+require dirname(__FILE__) . '/inc/zone-geo-shortcode.php';
+
+/*
  * Add a vdn_club_map shortcode for /clubs
  */
 require dirname(__FILE__) . '/inc/club-map-shortcode.php';
