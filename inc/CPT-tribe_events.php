@@ -51,7 +51,7 @@ register_field_group(array (
             //'key' => '',
             'label' => '',//'Coordonnées GPS',
             'name' => 'coordonnees_gps',
-            'type' => 'hidden',//'text',
+            'type' => 'text',//'hidden',
             'instructions' => '',//'Coordonnées utilisées sur la carte pour situer le club (laisser vide si non-connu)',
             'required' => 0,
             'default_value' => '',
