@@ -16,19 +16,19 @@ $VDN_CONFIG = array(
         'formation_animateurs'=>array(
             'label'=>'Formation d animateurs VDN',
             'slug'=>'formation_animateurs',
-            'color'=>'5171b6',
+            'color'=>'5071b6',
             'letter'=>'F',
         ),
         'apero_VDN'=>array(
             'label'=>'Apéro VDN',
             'slug'=>'apero_VDN',
-            'color'=>'708090',
+            'color'=>'f47726',
             'letter'=>'P',
         ),
         'tour_de_france'=>array(
             'label'=>'Tour de France',
             'slug'=>'tour_de_france',
-            'color'=>'fc6d6d',
+            'color'=>'3e3e60',
             'letter'=>'T',
         ),
     ),
@@ -39,11 +39,11 @@ $VDN_CONFIG = array(
         ),
         'parcours'=>array(
             'label'=>'Parcours pédagogique',
-            'color'=>'5171b6',
+            'color'=>'5071b6',
         ),
         'outil'=>array(
             'label'=>'Conseils et médiation',
-            'color'=>'888888',
+            'color'=>'3e3e60',
         ),
     ),
     'coordinateurs_bsf' => array(

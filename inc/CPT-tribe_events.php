@@ -48,14 +48,14 @@ register_field_group(array (
     'title' => 'Options Event Venues',
     'fields' => array (
         array (
-            //'key' => '',
+            'key' => 'field_1b8d6ba117075',
             'label' => '',//'Coordonnées GPS',
             'name' => 'coordonnees_gps',
             'type' => 'text',//'hidden',
             'instructions' => '',//'Coordonnées utilisées sur la carte pour situer le club (laisser vide si non-connu)',
             'required' => 0,
             'default_value' => '',
-            'placeholder' => '48.85109, 2.41967',
+            'placeholder' => '',
             'prepend' => '',
             'append' => '',
             'formatting' => 'none',

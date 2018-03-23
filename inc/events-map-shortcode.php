@@ -11,18 +11,19 @@ function vdn_event_map_shortcode() {
     return ob_get_clean();
 }
 function vdn_event_map_html() {
+    global $posts;
     global $VDN_CONFIG;
     $event_types = $VDN_CONFIG['vdn_event_types'];
     ?>
 
-    <div class="row" style="background-color:#ddd;padding:4px;">
+    <div id="event_type_selection" class="row" style="background-color:#ddd;padding:4px;">
         <div class="col-sm-3">Filtrer par type : </div>
         <div class="col-sm-9">
             <select style="width:100%" onchange="return update_vdn_events(this)">
                 <option value='all' selected="selected">Tous</option>
             <?php
             foreach($event_types as $k=>$v){
-                echo "<option style='background-color:#{$v['color']}' value='{$k}'>{$v['label']}</option>";
+                echo "<option style='background-color:#{$v['color']}; color:#fff' value='{$k}'>{$v['label']}</option>";
             }
             ?>
             </select>
@@ -44,10 +45,13 @@ function vdn_event_map_html() {
         var infowindow;
         var locations = [
         <?php
-        $events = get_posts(array('post_type' => 'tribe_events'));
+        $events = $posts; // using global $posts for past/future filtering
+        echo "/* count(events)=".count($events)." */\n";
         foreach($events as $event){
             $evt_type = get_post_meta($event->ID, 'type', true);
+            echo "/* evt_type=$evt_type */\n";
             $location_id = vdn_get_event_location_id($event->ID);
+            echo "/* location_id=$location_id - coordonnees_gps=[".get_post_meta($location_id, 'coordonnees_gps', true)."] */\n";
             $coords = explode(',', get_post_meta($location_id, 'coordonnees_gps', true));
             if(count($coords)==2){
                 echo "
@@ -66,6 +70,11 @@ function vdn_event_map_html() {
         ];
 
         function initMap() {
+            if(locations.length<1){
+                document.getElementById('map').style.display = 'none';
+                document.getElementById('event_type_selection').style.display = 'none';
+                return;
+            }
             var bounds = new google.maps.LatLngBounds();
             map = new google.maps.Map(document.getElementById('map'));
             
@@ -114,11 +123,14 @@ function vdn_event_map_html() {
                 bounds.extend(marker.getPosition());
             }
 
-            if(locations.length>1) {
+            if(locations.length>=2) {
                 google.maps.event.addListenerOnce(map, 'bounds_changed', function (event) {
                     map.setZoom(map.getZoom() - 2);
                 });
                 map.fitBounds(bounds);
+            }else if(locations.length==1) {
+                map.setCenter(locations[0].marker.position);
+                map.setZoom(6);
             }
             
             var markerCluster = new MarkerClusterer(map, markers,

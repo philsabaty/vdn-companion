@@ -38,3 +38,9 @@ https://www.itthinx.com/plugins/groups/
 * Improved PDF rendering
 * Added coordinateurs BSF dispatch in contact form
 
+
+-- V1.3 Changelog --
+* Fixed bug sending undue club validation emails
+* Added missing ACF keys in register_field_group()
+* Added support for empty or single-location on events map
+* Added new colors for events and fiches

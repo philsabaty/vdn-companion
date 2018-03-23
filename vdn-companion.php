@@ -2,7 +2,7 @@
 /**
  * Plugin Name: VDN Companion
  * Description: VDN Companion contient des éléments indispensables au site Voyageurs du Numérique. A utiliser avec le theme VDN-theme
- * Version: 1.2
+ * Version: 1.3
  * Text Domain: vdn-companion
  * Author: Philippe Sabaty for BSF
  * Author URI: https://www.malt.fr/profile/philippesabaty

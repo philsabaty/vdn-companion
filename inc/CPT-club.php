@@ -302,16 +302,19 @@ function add_club_category_for_posts($post_id){
  */
 add_action( 'draft_to_publish', 'vdn_send_club_validation_email', 10, 1 ); 
 function vdn_send_club_validation_email($club_id){
-    $author_id = get_post_field ('post_author', $club_id);
-    $author = get_userdata($author_id);
-    $email_content = vdn_get_club_validation_email_content($club_id);
-    $headers = array();
-    wp_mail( //$to, $subject, $message
-        $author->user_email,
-        "Voyageurs Du Numérique : Votre club est validé !",
-        $email_content,
-        'Content-Type: text/html; charset=UTF-8;'. "\r\n"
-        ."From: Voyageurs Du Numerique <".get_bloginfo('admin_email').">". "\r\n"
-        
-    );
+    $post_type = get_post_type($club_id);
+    if ( "club" == $post_type) {
+        $author_id = get_post_field ('post_author', $club_id);
+        $author = get_userdata($author_id);
+        $email_content = vdn_get_club_validation_email_content($club_id);
+        $headers = array();
+        wp_mail( //$to, $subject, $message
+            $author->user_email,
+            "Voyageurs Du Numérique : Votre club est validé !",
+            $email_content,
+            'Content-Type: text/html; charset=UTF-8;'. "\r\n"
+            ."From: Voyageurs Du Numerique <".get_bloginfo('admin_email').">". "\r\n"
+            
+        );
+    }
 }
