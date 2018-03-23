@@ -54,10 +54,11 @@ function vdn_event_map_html() {
             echo "/* location_id=$location_id - coordonnees_gps=[".get_post_meta($location_id, 'coordonnees_gps', true)."] */\n";
             $coords = explode(',', get_post_meta($location_id, 'coordonnees_gps', true));
             if(count($coords)==2){
+                $location_title = addslashes($event->post_title);
                 echo "
                     {
                         wpid: '{$event->ID}',
-                        html: '<strong>{$event->post_title}</strong><br><strong><a href=\'".get_site_url(null, "/event/{$event->post_name}")."\'>Voir cet événement.</a></strong></p>',
+                        html: '<strong>{$location_title}</strong><br><strong><a href=\'".get_site_url(null, "/event/{$event->post_name}")."\'>Voir cet événement.</a></strong></p>',
                         lat: {$coords[0]},
                         lng: {$coords[1]},
                         evt_type: '$evt_type',
@@ -88,7 +89,7 @@ function vdn_event_map_html() {
                 foreach($event_types as $et){
                     echo "
                     '{$et['slug']}':{
-                        url: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={$et['letter']}|{$et['color']}',
+                        url: 'https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={$et['letter']}|{$et['color']}',
                         size: new google.maps.Size(20, 32),
                         origin: new google.maps.Point(0, 0),
                         anchor: new google.maps.Point(10, 32)

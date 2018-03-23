@@ -44,3 +44,8 @@ https://www.itthinx.com/plugins/groups/
 * Added missing ACF keys in register_field_group()
 * Added support for empty or single-location on events map
 * Added new colors for events and fiches
+
+-- v1.4 Changelog --
+* Added various gps lookup fallbacks
+* Added addslashes in clubs and events titles
+* Google API pins moved from http to https

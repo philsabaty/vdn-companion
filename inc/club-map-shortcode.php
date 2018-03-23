@@ -46,11 +46,12 @@ function vdn_club_map_html() {
         foreach($clubs as $club){
             $coords = explode(',', get_post_meta($club->ID, 'coordonnees_gps', true));
             if(count($coords)==2){
-                $address =  get_post_meta($club->ID, 'code_postal', true).'  '. get_post_meta($club->ID, 'ville', true);
+                $address =  addslashes(get_post_meta($club->ID, 'code_postal', true).' '. get_post_meta($club->ID, 'ville', true));
+                $club_title = addslashes($club->post_title);
                 echo "
                     {
                         wpid: '{$club->ID}',
-                        html: '<strong>{$club->post_title}</strong><br><p>$address<br><strong><a href=\'".get_site_url(null, "/club/{$club->post_name}")."\'>Voir ce club.</a></strong></p>',
+                        html: '<strong>{$club_title}</strong><br><p>$address<br><strong><a href=\'".get_site_url(null, "/club/{$club->post_name}")."\'>Voir ce club.</a></strong></p>',
                         lat: {$coords[0]},
                         lng: {$coords[1]},
                         marker: null,
@@ -72,7 +73,7 @@ function vdn_club_map_html() {
             });
 
             var image = {
-                url: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|00ff00',
+                url: 'https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|00ff00',
                 size: new google.maps.Size(20, 32),
                 origin: new google.maps.Point(0, 0),
                 anchor: new google.maps.Point(10, 32)

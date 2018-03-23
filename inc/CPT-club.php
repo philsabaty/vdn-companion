@@ -251,14 +251,11 @@ function add_category_for_club($post_id){
         make_user_referentclub($author_id);
 
         // Fill GPS coordinates when a Club is updated
-        $coords = get_post_meta($post_id, 'coordonnees_gps', true);
-        if($coords==null || $coords==''){
-            $address =  get_post_meta($post_id, 'code_postal', true).'  '. get_post_meta($post_id, 'ville', true);
-            $geocoder_response = geocoding_sync($address, get_option('vdn_companion_google_api_key'));
-            if(is_array($geocoder_response)){
-                $coord = $geocoder_response['lat'].', '.$geocoder_response['lng'];
-                update_post_meta($post_id, 'coordonnees_gps',$coord);
-            }
+        $address =  get_post_meta($post_id, 'adresse', true).'  '.get_post_meta($post_id, 'code_postal', true).'  '. get_post_meta($post_id, 'ville', true);
+        $geocoder_response = geocoding_sync($address, get_option('vdn_companion_google_api_key'));
+        if(is_array($geocoder_response)){
+            $coord = $geocoder_response['lat'].', '.$geocoder_response['lng'];
+            update_post_meta($post_id, 'coordonnees_gps',$coord);
         }
     }
 

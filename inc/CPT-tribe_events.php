@@ -98,6 +98,9 @@ function add_gps_coordinates_for_event_venue($post_id){
         @$address .= $location_meta['_VenueCity'][0].' ,';
         @$address .= $location_meta['_VenueCountry'][0].' ';
 
+        $address = trim($address);
+        // allow address specified only in venue's title
+        if ($address == '') {$address = get_the_title($post_id);}
         if ($address != '') {
             $geocoder_response = geocoding_sync($address, get_option('vdn_companion_google_api_key'));
             if(is_array($geocoder_response)){
