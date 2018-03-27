@@ -49,3 +49,7 @@ https://www.itthinx.com/plugins/groups/
 * Added various gps lookup fallbacks
 * Added addslashes in clubs and events titles
 * Google API pins moved from http to https
+
+-- v1.5 Changelog --
+* Removed thematiques selector in regular post editor
+* Added admin settings backup

@@ -1,0 +1,3 @@
+PLUGIN GROUPS : /wp-admin/admin.php?page=groups-admin-options
+    Bloc "Autorisations"
+        Décocher la case "Administrer les Groupes" pour le role "auteur"

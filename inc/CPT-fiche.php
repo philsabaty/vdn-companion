@@ -374,7 +374,7 @@ h1{padding-top:16px;}
  */
 add_action( 'add_meta_boxes', 'vdn_metabox_thematiques_fiche' );
 function vdn_metabox_thematiques_fiche() {
-    add_meta_box( 'after-title-help', 'Catégories thématiques', 'vdn_metabox_thematiques_content', array('fiche', 'post'), 'acf_after_title', 'high' );
+    add_meta_box( 'after-title-help', 'Catégories thématiques', 'vdn_metabox_thematiques_content', array('fiche'), 'acf_after_title', 'high' );
 }
 function vdn_metabox_thematiques_content($post) {
     ?>
