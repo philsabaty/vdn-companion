@@ -90,7 +90,7 @@ register_field_group(array (
 add_action( 'save_post', 'add_gps_coordinates_for_event_venue', 20,1 );
 function add_gps_coordinates_for_event_venue($post_id){
     $post_type = get_post_type($post_id);
-    if ( "tribe_venue" == $post_type && (get_post_status($post_id)=='publish')) {
+    if ( "tribe_venue" == $post_type && !wp_is_post_revision( $post_id) && !wp_is_post_autosave( $post_id )) {
         $location_meta = get_post_meta($post_id);
         $address = '';
         @$address .= $location_meta['_VenueAddress'][0].' ,';
@@ -114,4 +114,14 @@ function add_gps_coordinates_for_event_venue($post_id){
 function vdn_get_event_location_id($event_id){
     $location_ids = get_post_meta($event_id, '_EventVenueID');
     return ( !empty($location_ids))?$location_ids[0]:0;
+}
+
+/*
+ * Disable AJAX navigation links that prevents google map updates
+ */
+add_action('wp_print_scripts', 'events_calendar_remove_scripts' , 10);
+function events_calendar_remove_scripts() {
+    wp_dequeue_script( 'tribe-events-calendar');
+    wp_dequeue_script( 'tribe-events-list');
+    wp_dequeue_script( 'tribe-events-ajax-day');
 }

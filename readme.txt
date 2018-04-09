@@ -53,3 +53,8 @@ https://www.itthinx.com/plugins/groups/
 -- v1.5 Changelog --
 * Removed thematiques selector in regular post editor
 * Added admin settings backup
+
+-- v1.7 Changelog --
+* Removed implicit limit (pagination) on clubs map
+* Improved user-content notification
+* Disabled ajax behaviour on calendar (messing up events map)

@@ -478,21 +478,23 @@ add_action( 'save_post', function ($post_id) {
     global $VDN_CONFIG;
     $post_type = get_post_type($post_id);
     if( in_array($post_type, array('fiche', 'post', 'tribe_events')) ){
-        if( !vdn_is_admin() && !wp_is_post_revision($post_id) && !wp_is_post_autosave($post_id)  ) {
+        if( !vdn_is_admin() && !wp_is_post_revision($post_id) && !wp_is_post_autosave($post_id) && get_post_status($post_id)=='publish'  ) {
             if ( isset($VDN_CONFIG['user_action_notification_email']) && $VDN_CONFIG['user_action_notification_email']!='' ){
+                $pto = get_post_type_object( $post_type );
+                $post_type_name = ($pto==null)?'contenu':$pto->labels->singular_name;
                 $author_id = get_post_field ('post_author', $post_id);
                 $author = get_userdata($author_id);
                 $post = get_post($post_id);
                 $mail_content = "Bonjour,<br>
                 l' utlisateur \"<a href='".get_site_url(null, '/user/'.$author->user_nicename)."'>".$author->display_name."</a>\" 
-                vient de créer ou de modifier un élément sur Voyageurs du Numérique :<br>
+                vient de créer ou de modifier un(e) $post_type_name sur Voyageurs du Numérique :<br>
                 <a href='".get_post_permalink($post_id)."'>{$post->post_title}</a>
                 <br><br>
                 Ceci est un mail automatique, aucune action n'est requise de votre part.";
 
                 wp_mail( //$to, $subject, $message
                     $VDN_CONFIG['user_action_notification_email'],
-                    "[VDN] Notification de nouveau contenu utilisateur",
+                    "[VDN] Notification de nouvel(le) $post_type_name utilisateur : {$post->post_title}",
                     $mail_content,
                     array('Content-Type: text/html; charset=UTF-8')
                 );

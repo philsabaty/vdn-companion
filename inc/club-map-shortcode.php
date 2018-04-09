@@ -11,7 +11,7 @@ function vdn_club_map_shortcode() {
     return ob_get_clean();
 }
 function vdn_club_map_html() {
-    $clubs = get_posts(array('post_type' => 'club'));
+    $clubs = get_posts(array('post_type' => 'club', 'numberposts' => -1));
     ?>
 
     <div id="map" style="width:100%; height:480px;"></div>
