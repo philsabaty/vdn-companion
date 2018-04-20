@@ -3,7 +3,7 @@
  * Global config for VDN features // $VDN_CONFIG['']
  */
 $VDN_CONFIG = array(
-    'user_action_notification_email' => 'mahaut.demoulins@bibliosansfrontieres.org', // leave blank to disable notification
+    'user_action_notification_email' => 'salome.hurel+sitedvn@bibliosansfrontieres.org', // leave blank to disable notification
     'open_fiches_in_new_tab' => true,
     'display_referent_email' => true,
     'vdn_event_types' => array(
@@ -49,7 +49,7 @@ $VDN_CONFIG = array(
     'coordinateurs_bsf' => array(
         'autre'=>array(
             'label'=>'Autre', 
-            'email'=>'mahaut.demoulins@bibliosansfrontieres.org'
+            'email'=>'salome.hurel+sitedvn@bibliosansfrontieres.org'
         ),
         'PACA'=>array(
             'label'=>'Région PACA', 
