@@ -45,14 +45,26 @@ function vdn_event_map_html() {
         var infowindow;
         var locations = [
         <?php
-        $events = $posts; // using global $posts for past/future filtering
-        echo "/* count(events)=".count($events)." */\n";
+        $events = get_posts(array('post_type' => 'tribe_events', 'numberposts' => -1));
+        $events = array_filter($events, function($e){
+            $date_ts = strtotime(get_post_meta($e->ID, '_EventStartDate', true));
+            $usePastEvents = isset($_GET['tribe_event_display']) && ($_GET['tribe_event_display']=='past');
+            return $usePastEvents ? ($date_ts<time()) : ($date_ts>=time());
+        });
         foreach($events as $event){
             $evt_type = get_post_meta($event->ID, 'type', true);
-            echo "/* evt_type=$evt_type */\n";
             $location_id = vdn_get_event_location_id($event->ID);
-            echo "/* location_id=$location_id - coordonnees_gps=[".get_post_meta($location_id, 'coordonnees_gps', true)."] */\n";
-            $coords = explode(',', get_post_meta($location_id, 'coordonnees_gps', true));
+            if($location_id==''){
+                echo "/* event#{$event->ID} has no location */\n";
+                continue;
+            }
+            $coors_meta = get_post_meta($location_id, 'coordonnees_gps', true);
+            if($coors_meta==''){
+                // si le lieu n'a pas encore de coord GPS, mettre à jour
+                vdn_update_event_location_gps_coordnates($location_id);
+                $coors_meta = get_post_meta($location_id, 'coordonnees_gps', true);
+            }
+            $coords = explode(',', $coors_meta);
             if(count($coords)==2){
                 $location_title = addslashes($event->post_title);
                 echo "
@@ -134,10 +146,10 @@ function vdn_event_map_html() {
                 map.setZoom(6);
             }
             
-            var markerCluster = new MarkerClusterer(map, markers,
-                {imagePath: '<?php echo plugins_url('/vdn-companion/inc/googlemaps/m'); ?>'}
-            );
-            markerCluster.setMaxZoom(14);
+            //var markerCluster = new MarkerClusterer(map, markers,
+            //    {imagePath: '<?php //echo plugins_url('/vdn-companion/inc/googlemaps/m'); ?>//'}
+            //);
+            //markerCluster.setMaxZoom(14);
         }
     </script>
     <script src="<?php echo plugins_url('/vdn-companion/inc/googlemaps/markerclusterer.js'); ?>"></script>

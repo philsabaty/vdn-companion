@@ -110,10 +110,10 @@ function vdn_club_map_html() {
                 map.fitBounds(bounds);
             }
 
-            var markerCluster = new MarkerClusterer(map, markers,
-                {imagePath: '<?php echo plugins_url('/vdn-companion/inc/googlemaps/m'); ?>'}
-            );
-            markerCluster.setMaxZoom(14);
+            //var markerCluster = new MarkerClusterer(map, markers,
+            //    {imagePath: '<?php //echo plugins_url('/vdn-companion/inc/googlemaps/m'); ?>//'}
+            //);
+            //markerCluster.setMaxZoom(14);
         }
     </script>
     <script src="<?php echo plugins_url('/vdn-companion/inc/googlemaps/markerclusterer.js'); ?>"></script>

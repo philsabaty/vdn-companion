@@ -58,3 +58,7 @@ https://www.itthinx.com/plugins/groups/
 * Removed implicit limit (pagination) on clubs map
 * Improved user-content notification
 * Disabled ajax behaviour on calendar (messing up events map)
+
+-- v1.8 Changelog --
+* Disabled GoogleMaps Marker Cluster
+* Force GPS lookup for empty-coords events before display

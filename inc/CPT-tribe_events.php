@@ -91,29 +91,32 @@ add_action( 'save_post', 'add_gps_coordinates_for_event_venue', 20,1 );
 function add_gps_coordinates_for_event_venue($post_id){
     $post_type = get_post_type($post_id);
     if ( "tribe_venue" == $post_type && !wp_is_post_revision( $post_id) && !wp_is_post_autosave( $post_id )) {
-        $location_meta = get_post_meta($post_id);
-        $address = '';
-        @$address .= $location_meta['_VenueAddress'][0].' ,';
-        @$address .= $location_meta['_VenueZip'][0].' ,';
-        @$address .= $location_meta['_VenueCity'][0].' ,';
-        @$address .= $location_meta['_VenueCountry'][0].' ';
+        vdn_update_event_location_gps_coordnates($post_id);
+    }
+}
 
-        $address = trim($address);
-        // allow address specified only in venue's title
-        if ($address == '') {$address = get_the_title($post_id);}
+function vdn_update_event_location_gps_coordnates($location_id){
+    $address = '';
+    $location_meta = get_post_meta($location_id);
+    @$address .= $location_meta['_VenueAddress'][0].' ,';
+    @$address .= $location_meta['_VenueZip'][0].' ,';
+    @$address .= $location_meta['_VenueCity'][0].' ,';
+    @$address .= $location_meta['_VenueCountry'][0].' ';
+
+    $address = trim($address);
+    // allow address specified only in venue's title
+    if ($address == '') {$address = get_the_title($location_id);}
         if ($address != '') {
             $geocoder_response = geocoding_sync($address, get_option('vdn_companion_google_api_key'));
             if(is_array($geocoder_response)){
                 $coord = $geocoder_response['lat'].', '.$geocoder_response['lng'];
-                update_post_meta($post_id, 'coordonnees_gps',$coord);
-            }
+                update_post_meta($location_id, 'coordonnees_gps',$coord);
         }
     }
 }
 
 function vdn_get_event_location_id($event_id){
-    $location_ids = get_post_meta($event_id, '_EventVenueID');
-    return ( !empty($location_ids))?$location_ids[0]:0;
+    return get_post_meta($event_id, '_EventVenueID', true);
 }
 
 /*
