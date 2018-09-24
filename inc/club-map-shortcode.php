@@ -64,7 +64,9 @@ function vdn_club_map_html() {
 
         function initMap() {
             var bounds = new google.maps.LatLngBounds();
-            map = new google.maps.Map(document.getElementById('map'));
+            map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 13
+            });
 
             var oms = new OverlappingMarkerSpiderfier(map, {
                 markersWontMove: true,
